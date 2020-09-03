@@ -17,7 +17,8 @@ function getRTSPfileStream(){
     child4=null,
     child5=null,
     child6=null,
-    child7=null;
+    child7=null,
+    child8=null;
     
         child=spawn("ffmpeg",[ 
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
@@ -118,14 +119,29 @@ function getRTSPfileStream(){
                                     child7.on('exit', function () {
                                     console.log("exited") 
                                     });
+                                    child8=spawn("ffmpeg",[ 
+                                        "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
+                                        "-c", "copy", 
+                                        "-map", "0", 
+                                        "-f", "segment", 
+                                        "-segment_time", "300", 
+                                        "-segment_format", "mp4", 
+                                        "capture8-%03d.mp4"
+                                        ]);
+                                        child8.stdout.pipe(process.stdout);
+                                        child8.stderr.pipe(process.stdout);
+                                        child8.on('exit', function () {
+                                        console.log("exited") 
+                                        });
                                     timeoutID = setTimeout(function() {
                                         child.kill('SIGINT');
-                                    child2.kill('SIGINT');
-                                    child3.kill('SIGINT');
-                                    child4.kill('SIGINT');
-                                    child5.kill('SIGINT');
-                                    child6.kill('SIGINT');
-                                    child7.kill('SIGINT');
+                                        child2.kill('SIGINT');
+                                        child3.kill('SIGINT');
+                                        child4.kill('SIGINT');
+                                        child5.kill('SIGINT');
+                                        child6.kill('SIGINT');
+                                        child7.kill('SIGINT');
+                                        child8.kill('SIGINT');
                                       }, 60000)
                                     
 
@@ -200,10 +216,10 @@ function getFile(channelNumber, downloadTime) {
         //whent he server send the end header, we then start downloading the next video channel 
         res.on('end', function() {
             
-            if (channelIdentifier < 5) {
+            if (channelIdentifier < 9) {
                 channelIdentifier++
                 getFile(channelIdentifier, now)
-            } else if (channelIdentifier > 5) {
+            } else if (channelIdentifier > 8) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
                 channelIdentifier = 1
             }
