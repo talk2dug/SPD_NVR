@@ -7,7 +7,7 @@ let digester = require('http-digest-client')(user, authpass);
 var channelIdentifier = 1;
 var now
 var startedTime
-
+var ffmpegStatus
 
 function getRTSPfileStream(){
     var spawn=require('child_process').spawn
@@ -133,22 +133,25 @@ function getRTSPfileStream(){
                                         child8.on('exit', function () {
                                         console.log("exited") 
                                         });
-                                    
+                                        timeoutID = setTimeout(function() {
+                                            if(ffmpegStatus === 'stop'){
+                                            child.kill('SIGINT');
+                                            child2.kill('SIGINT');
+                                            child3.kill('SIGINT');
+                                            child4.kill('SIGINT');
+                                            child5.kill('SIGINT');
+                                            child6.kill('SIGINT');
+                                            child7.kill('SIGINT');
+                                            child8.kill('SIGINT');
+                                            ffmpegStatus = 'null'
+                                            }
+                                          }, 1000)
                                     
 
 }
 
 function stopFFMPEG(){
-    
-        child.kill('SIGINT');
-        child2.kill('SIGINT');
-        child3.kill('SIGINT');
-        child4.kill('SIGINT');
-        child5.kill('SIGINT');
-        child6.kill('SIGINT');
-        child7.kill('SIGINT');
-        child8.kill('SIGINT');
-      
+    ffmpegStatus = 'stop';
 
 
 
@@ -237,5 +240,6 @@ function getFile(channelNumber, downloadTime) {
 module.exports = {
     getRTSPfileStream,
     getFile,
-    stopFFMPEG
+ stopFFMPEG
+
 };
