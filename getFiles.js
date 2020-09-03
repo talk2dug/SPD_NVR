@@ -10,7 +10,7 @@ var startedTime
 var ffmpegStatus
 
 function getRTSPfileStream(){
-    timeoutID = setTimeout(function() {
+    setTimeout(function() {
         console.log(ffmpegStatus)
         if(ffmpegStatus === 'stop'){
         child.kill('SIGINT');
@@ -105,6 +105,7 @@ function getRTSPfileStream(){
                             child5.on('exit', function () {
                             console.log("exited") 
                             });
+                            /*
                             child6=spawn("ffmpeg",[ 
                                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
                                 "-c", "copy", 
@@ -134,7 +135,7 @@ function getRTSPfileStream(){
                                     console.log("exited") 
                                     });
                                     child8=spawn("ffmpeg",[ 
-                                        "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
+                                        "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
                                         "-c", "copy", 
                                         "-map", "0", 
                                         "-f", "segment", 
@@ -147,6 +148,7 @@ function getRTSPfileStream(){
                                         child8.on('exit', function () {
                                         console.log("exited") 
                                         });
+                                        */
                                         
                                     
 
