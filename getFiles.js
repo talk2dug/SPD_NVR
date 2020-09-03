@@ -8,31 +8,32 @@ var channelIdentifier = 1;
 var now
 var startedTime
 var ffmpegStatus
-
+var spawn=require('child_process').spawn
+, child=null,
+child2=null,
+child3=null,
+child4=null,
+child5=null,
+child6=null,
+child7=null,
+child8=null;
+setTimeout(function() {
+    console.log(ffmpegStatus)
+    if(ffmpegStatus === 'stop'){
+    child.kill('SIGINT');
+    child2.kill('SIGINT');
+    child3.kill('SIGINT');
+    child4.kill('SIGINT');
+    child5.kill('SIGINT');
+    //child6.kill('SIGINT');
+    //child7.kill('SIGINT');
+    //child8.kill('SIGINT');
+    ffmpegStatus = 'null'
+    }
+  }, 1000)
 function getRTSPfileStream(){
-    setTimeout(function() {
-        console.log(ffmpegStatus)
-        if(ffmpegStatus === 'stop'){
-        child.kill('SIGINT');
-        child2.kill('SIGINT');
-        child3.kill('SIGINT');
-        child4.kill('SIGINT');
-        child5.kill('SIGINT');
-        child6.kill('SIGINT');
-        child7.kill('SIGINT');
-        child8.kill('SIGINT');
-        ffmpegStatus = 'null'
-        }
-      }, 1000)
-    var spawn=require('child_process').spawn
-    , child=null,
-    child2=null,
-    child3=null,
-    child4=null,
-    child5=null,
-    child6=null,
-    child7=null,
-    child8=null;
+    
+
     
         child=spawn("ffmpeg",[ 
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
