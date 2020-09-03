@@ -20,14 +20,7 @@ child8=null;
 setTimeout(function() {
     console.log(ffmpegStatus)
     if(ffmpegStatus === 'stop'){
-    child.kill('SIGINT');
-    child2.kill('SIGINT');
-    child3.kill('SIGINT');
-    child4.kill('SIGINT');
-    child5.kill('SIGINT');
-    //child6.kill('SIGINT');
-    //child7.kill('SIGINT');
-    //child8.kill('SIGINT');
+    
     ffmpegStatus = 'null'
     }
   }, 1000)
@@ -156,7 +149,14 @@ function getRTSPfileStream(){
 }
 
 function stopFFMPEG(){
-    ffmpegStatus = 'stop';
+    child.kill('SIGINT');
+    child2.kill('SIGINT');
+    child3.kill('SIGINT');
+    child4.kill('SIGINT');
+    child5.kill('SIGINT');
+    //child6.kill('SIGINT');
+    //child7.kill('SIGINT');
+    //child8.kill('SIGINT');
 
 
 
