@@ -10,6 +10,20 @@ var startedTime
 var ffmpegStatus
 
 function getRTSPfileStream(){
+    timeoutID = setTimeout(function() {
+        console.log(ffmpegStatus)
+        if(ffmpegStatus === 'stop'){
+        child.kill('SIGINT');
+        child2.kill('SIGINT');
+        child3.kill('SIGINT');
+        child4.kill('SIGINT');
+        child5.kill('SIGINT');
+        child6.kill('SIGINT');
+        child7.kill('SIGINT');
+        child8.kill('SIGINT');
+        ffmpegStatus = 'null'
+        }
+      }, 1000)
     var spawn=require('child_process').spawn
     , child=null,
     child2=null,
@@ -133,20 +147,7 @@ function getRTSPfileStream(){
                                         child8.on('exit', function () {
                                         console.log("exited") 
                                         });
-                                        timeoutID = setTimeout(function() {
-                                            console.log(ffmpegStatus)
-                                            if(ffmpegStatus === 'stop'){
-                                            child.kill('SIGINT');
-                                            child2.kill('SIGINT');
-                                            child3.kill('SIGINT');
-                                            child4.kill('SIGINT');
-                                            child5.kill('SIGINT');
-                                            child6.kill('SIGINT');
-                                            child7.kill('SIGINT');
-                                            child8.kill('SIGINT');
-                                            ffmpegStatus = 'null'
-                                            }
-                                          }, 1000)
+                                        
                                     
 
 }
