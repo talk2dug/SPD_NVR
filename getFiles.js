@@ -134,6 +134,7 @@ function getRTSPfileStream(){
                                         console.log("exited") 
                                         });
                                         timeoutID = setTimeout(function() {
+                                            console.log(ffmpegStatus)
                                             if(ffmpegStatus === 'stop'){
                                             child.kill('SIGINT');
                                             child2.kill('SIGINT');
