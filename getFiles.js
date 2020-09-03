@@ -133,17 +133,25 @@ function getRTSPfileStream(){
                                         child8.on('exit', function () {
                                         console.log("exited") 
                                         });
-                                    timeoutID = setTimeout(function() {
-                                        child.kill('SIGINT');
-                                        child2.kill('SIGINT');
-                                        child3.kill('SIGINT');
-                                        child4.kill('SIGINT');
-                                        child5.kill('SIGINT');
-                                        child6.kill('SIGINT');
-                                        child7.kill('SIGINT');
-                                        child8.kill('SIGINT');
-                                      }, 60000)
                                     
+                                    
+
+}
+
+function stopFFMPEG(){
+    
+        child.kill('SIGINT');
+        child2.kill('SIGINT');
+        child3.kill('SIGINT');
+        child4.kill('SIGINT');
+        child5.kill('SIGINT');
+        child6.kill('SIGINT');
+        child7.kill('SIGINT');
+        child8.kill('SIGINT');
+      
+
+
+
 
 }
 function getFile(channelNumber, downloadTime) {
@@ -228,5 +236,6 @@ function getFile(channelNumber, downloadTime) {
 }
 module.exports = {
     getRTSPfileStream,
-    getFile
+    getFile,
+    stopFFMPEG
 };

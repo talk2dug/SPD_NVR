@@ -77,6 +77,8 @@ io.on("connection", function(socket) {
                     datestamp = moment()
                     endCallClicked = true
                     io.emit("bodyCam", "STOP")
+                    httpUtils.stopFFMPEG()
+                    
                     break;
                 case 'download':
                    
