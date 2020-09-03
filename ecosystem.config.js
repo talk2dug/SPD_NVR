@@ -1,10 +1,13 @@
 module.exports = {
   apps : [{
-    script: 'index.js',
-    watch: '.'
-  }, {
-    script: './service-worker/',
-    watch: ['./service-worker']
+    script: "app.js",
+    watch: ["server", "client"],
+    // Delay between restart
+    watch_delay: 1000,
+    ignore_watch : ["node_modules"],
+    watch_options: {
+      "followSymlinks": false
+    }
   }],
 
   deploy : {
