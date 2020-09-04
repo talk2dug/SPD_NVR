@@ -35,7 +35,7 @@ function getRTSPfileStream(){
             "-f", "segment", 
             "-segment_time", "300", 
             "-segment_format", "mp4", 
-            "capture-%03d.mp4"
+            "/home/jack/videos/capture-%03d.mp4"
             ]);
             //child.stdout.pipe(process.stdout);
             //child.stderr.pipe(process.stdout);
@@ -50,7 +50,7 @@ function getRTSPfileStream(){
                 "-f", "segment", 
                 "-segment_time", "300", 
                 "-segment_format", "mp4", 
-                "capture2-%03d.mp4"
+                "/home/jack/videos/capture2-%03d.mp4"
                 ]);
                 //child2.stdout.pipe(process.stdout);
                 //child2.stderr.pipe(process.stdout);
@@ -64,7 +64,7 @@ function getRTSPfileStream(){
                     "-f", "segment", 
                     "-segment_time", "300", 
                     "-segment_format", "mp4", 
-                    "capture3-%03d.mp4"
+                    "/home/jack/videos/capture3-%03d.mp4"
                     ]);
                     //child3.stdout.pipe(process.stdout);
                     //child3.stderr.pipe(process.stdout);
@@ -78,7 +78,7 @@ function getRTSPfileStream(){
                         "-f", "segment", 
                         "-segment_time", "300", 
                         "-segment_format", "mp4", 
-                        "capture4-%03d.mp4"
+                        "/home/jack/videos/capture4-%03d.mp4"
                         ]);
                         //child4.stdout.pipe(process.stdout);
                         //child4.stderr.pipe(process.stdout);
@@ -92,7 +92,7 @@ function getRTSPfileStream(){
                             "-f", "segment", 
                             "-segment_time", "300", 
                             "-segment_format", "mp4", 
-                            "capture5-%03d.mp4"
+                            "/home/jack/videos/capture5-%03d.mp4"
                             ]);
                             //child5.stdout.pipe(process.stdout);
                             //child5.stderr.pipe(process.stdout);
@@ -107,7 +107,7 @@ function getRTSPfileStream(){
                                 "-f", "segment", 
                                 "-segment_time", "300", 
                                 "-segment_format", "mp4", 
-                                "capture6-%03d.mp4"
+                                "/home/jack/videos/capture6-%03d.mp4"
                                 ]);
                                 child6.stdout.pipe(process.stdout);
                                 child6.stderr.pipe(process.stdout);
@@ -121,7 +121,7 @@ function getRTSPfileStream(){
                                     "-f", "segment", 
                                     "-segment_time", "300", 
                                     "-segment_format", "mp4", 
-                                    "capture7-%03d.mp4"
+                                    "/home/jack/videos/capture7-%03d.mp4"
                                     ]);
                                     child7.stdout.pipe(process.stdout);
                                     child7.stderr.pipe(process.stdout);
@@ -135,7 +135,7 @@ function getRTSPfileStream(){
                                         "-f", "segment", 
                                         "-segment_time", "300", 
                                         "-segment_format", "mp4", 
-                                        "capture8-%03d.mp4"
+                                        "/home/jack/videos/capture8-%03d.mp4"
                                         ]);
                                         child8.stdout.pipe(process.stdout);
                                         child8.stderr.pipe(process.stdout);
