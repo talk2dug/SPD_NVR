@@ -38,7 +38,7 @@ function getRTSPfileStream(){
             "capture-%03d.mp4"
             ]);
             //child.stdout.pipe(process.stdout);
-            child.stderr.pipe(process.stdout);
+            //child.stderr.pipe(process.stdout);
             child.on('exit', function () {
             console.log("exited") 
             });
@@ -53,7 +53,7 @@ function getRTSPfileStream(){
                 "capture2-%03d.mp4"
                 ]);
                 //child2.stdout.pipe(process.stdout);
-                child2.stderr.pipe(process.stdout);
+                //child2.stderr.pipe(process.stdout);
                 child2.on('exit', function () {
                 console.log("exited") 
                 });
@@ -67,7 +67,7 @@ function getRTSPfileStream(){
                     "capture3-%03d.mp4"
                     ]);
                     //child3.stdout.pipe(process.stdout);
-                    child3.stderr.pipe(process.stdout);
+                    //child3.stderr.pipe(process.stdout);
                     child3.on('exit', function () {
                     console.log("exited") 
                     });
@@ -81,7 +81,7 @@ function getRTSPfileStream(){
                         "capture4-%03d.mp4"
                         ]);
                         //child4.stdout.pipe(process.stdout);
-                        child4.stderr.pipe(process.stdout);
+                        //child4.stderr.pipe(process.stdout);
                         child4.on('exit', function () {
                         console.log("exited") 
                         });
@@ -95,7 +95,7 @@ function getRTSPfileStream(){
                             "capture5-%03d.mp4"
                             ]);
                             //child5.stdout.pipe(process.stdout);
-                            child5.stderr.pipe(process.stdout);
+                            //child5.stderr.pipe(process.stdout);
                             child5.on('exit', function () {
                             console.log("exited") 
                             });
