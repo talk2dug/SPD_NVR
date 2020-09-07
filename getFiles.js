@@ -10,13 +10,13 @@ var startedTime
 var ffmpegStatus
 var spawn=require('child_process').spawn
 , child=null,
-child2=null,
-child3=null,
-child4=null,
-child5=null,
-child6=null,
-child7=null,
-child8=null;
+    child2=null,
+    child3=null,
+    child4=null,
+    child5=null,
+    child6=null,
+    child7=null,
+    child8=null;
 setTimeout(function() {
     console.log(ffmpegStatus)
     if(ffmpegStatus === 'stop'){
@@ -157,10 +157,6 @@ function stopFFMPEG(){
     //child6.kill('SIGINT');
     //child7.kill('SIGINT');
     //child8.kill('SIGINT');
-
-
-
-
 }
 function getFile(channelNumber, downloadTime) {
     channelIdentifier = channelNumber
