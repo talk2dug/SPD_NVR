@@ -233,6 +233,36 @@ function getFile(channelNumber, downloadTime) {
                 getFile(channelIdentifier, now)
             } else if (channelIdentifier > 8) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
+                var scp = require('scp');
+                var options = {
+                file: '/home/jack/videos/*.mp4',
+                user: 'admin',
+                host: '192.168.196.51',
+                port: '22',
+                path: '/home/admin/videos'
+                }
+                
+                scp.send(options, function (err) {
+                if (err) console.log(err);
+                else {
+                    console.log('File transferred.')
+                    var options = {
+                        file: '/home/jack/videos/*.dav',
+                        user: 'admin',
+                        host: '192.168.196.51',
+                        port: '22',
+                        path: '/home/admin/videos'
+                        }
+                        
+                        scp.send(options, function (err) {
+                        if (err) console.log(err);
+                        else {
+                            console.log('File transferred.')
+                            
+                    }
+                    })
+                }
+                });
                 channelIdentifier = 1
             }
         })
