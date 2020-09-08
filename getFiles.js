@@ -271,6 +271,5 @@ function getFile(channelNumber, downloadTime) {
 module.exports = {
     getRTSPfileStream,
     getFile,
- stopFFMPEG
-
+    stopFFMPEG
 };
