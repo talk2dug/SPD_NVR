@@ -6,6 +6,7 @@ let authpass = 'UUnv9njxg123!!';
 let digester = require('http-digest-client')(user, authpass);
 var channelIdentifier = 1;
 var now
+var start_time
 var startedTime
 var ffmpegStatus
 var spawn=require('child_process').spawn
