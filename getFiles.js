@@ -229,14 +229,14 @@ function getFile(channelNumber, downloadTime) {
         });
         //whent he server send the end header, we then start downloading the next video channel 
         res.on('end', function() {
-            if (channelIdentifier < 2) {
+            if (channelIdentifier < 9) {
                 channelIdentifier++
                 getFile(channelIdentifier, now)
-            } else if (channelIdentifier > 1) {
+            } else if (channelIdentifier > 8) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
                 var ncp = require('ncp').ncp;
  
-                ncp.limit = 16;
+                //ncp.limit = 16;
                 
                 ncp('/home/jack/videos/', '/mnt/drive/', function (err) {
                 if (err) {
