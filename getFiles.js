@@ -227,13 +227,35 @@ function getFile(channelNumber, downloadTime) {
         });
         //whent he server send the end header, we then start downloading the next video channel 
         res.on('end', function() {
-            
-            if (channelIdentifier < 9) {
+            if (channelIdentifier < 1) {
                 channelIdentifier++
                 getFile(channelIdentifier, now)
-            } else if (channelIdentifier > 8) {
+            } else if (channelIdentifier > 2) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
-                var scp = require('scp');
+                var ncp = require('ncp').ncp;
+ 
+                ncp.limit = 16;
+                
+                ncp('/home/jack/videos/', '/mnt/drive/', function (err) {
+                if (err) {
+                return console.error(err);
+                }
+                console.log('done!');
+                });
+                
+                channelIdentifier = 1
+            }
+        })
+    })
+}
+module.exports = {
+    getRTSPfileStream,
+    getFile,
+    stopFFMPEG
+};
+
+/*
+var scp = require('scp');
                 var options = {
                 file: '/home/jack/videos/*.mp4',
                 user: 'admin',
@@ -241,7 +263,6 @@ function getFile(channelNumber, downloadTime) {
                 port: '22',
                 path: '/home/admin/videos'
                 }
-                
                 scp.send(options, function (err) {
                 if (err) console.log(err);
                 else {
@@ -263,13 +284,4 @@ function getFile(channelNumber, downloadTime) {
                     })
                 }
                 });
-                channelIdentifier = 1
-            }
-        })
-    })
-}
-module.exports = {
-    getRTSPfileStream,
-    getFile,
-    stopFFMPEG
-};
+*/
