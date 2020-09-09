@@ -207,7 +207,8 @@ function getFile(channelNumber, downloadTime) {
         res.on('data', function(data) {
             x = 1
             // specify the path to the file, and create a buffer with characters we want to write
-            let path = "../videos/" + channelIdentifier + "-" + dStamp + "_" + start_time + '.dav';
+            var fileStartTime = moment(tStamp).format("HHmmss")
+            let path = "../videos/" + channelIdentifier + "_" + dStamp + "_" + fileStartTime + '.dav';
             // open the file in writing mode, adding a callback function where we do the actual writing
             fs.open(path, 'a', function(err, fd) {
                 if (err) {
@@ -227,10 +228,10 @@ function getFile(channelNumber, downloadTime) {
         });
         //whent he server send the end header, we then start downloading the next video channel 
         res.on('end', function() {
-            if (channelIdentifier < 1) {
+            if (channelIdentifier < 2) {
                 channelIdentifier++
                 getFile(channelIdentifier, now)
-            } else if (channelIdentifier > 2) {
+            } else if (channelIdentifier > 1) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
                 var ncp = require('ncp').ncp;
  
