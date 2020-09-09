@@ -78,19 +78,19 @@ io.on("connection", function(socket) {
                     endCallClicked = true
                     io.emit("bodyCam", "STOP")
                     httpUtils.stopFFMPEG()
-                    
+
                     break;
                 case 'download':
-                   
+
                     //setTimeout(function(){
                     //downloadFiles()
                     break;
                 default:
-                    
+
         }
     })
     socket.on('settings', function(data) {
-        
+
         //io.emit('setting',data)
     })
 });
