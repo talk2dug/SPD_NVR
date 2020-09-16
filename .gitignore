@@ -1,3 +1,6 @@
 .vscode/sftp.json
 .vscode/SPD_NVR.code-workspace
 id_rsa.pub
+NVR/public/javascripts/jsmpeg.min.js
+public/javascripts/jquery.js
+public/javascripts/jsmpeg.min.js

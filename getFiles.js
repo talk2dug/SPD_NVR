@@ -1,6 +1,7 @@
 const fs = require('fs');
 //const COSjUtils = require('./public/javascripts/jacksCode');
 const moment = require('moment');
+var scp = require('scp');
 let user = 'jack';
 let authpass = 'UUnv9njxg123!!';
 let digester = require('http-digest-client')(user, authpass);
@@ -101,7 +102,7 @@ function getRTSPfileStream() {
     child5.on('exit', function() {
         console.log("exited")
     });
-    /*
+   
     child6=spawn("ffmpeg",[ 
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
         "-c", "copy", 
@@ -111,8 +112,8 @@ function getRTSPfileStream() {
         "-segment_format", "mp4", 
         "/home/jack/videos/capture6-%03d.mp4"
         ]);
-        child6.stdout.pipe(process.stdout);
-        child6.stderr.pipe(process.stdout);
+        //child6.stdout.pipe(process.stdout);
+        //child6.stderr.pipe(process.stdout);
         child6.on('exit', function () {
         console.log("exited") 
         });
@@ -125,11 +126,12 @@ function getRTSPfileStream() {
             "-segment_format", "mp4", 
             "/home/jack/videos/capture7-%03d.mp4"
             ]);
-            child7.stdout.pipe(process.stdout);
-            child7.stderr.pipe(process.stdout);
+            //child7.stdout.pipe(process.stdout);
+            //child7.stderr.pipe(process.stdout);
             child7.on('exit', function () {
             console.log("exited") 
             });
+             /*
             child8=spawn("ffmpeg",[ 
                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
                 "-c", "copy", 
@@ -246,7 +248,20 @@ function getFile(channelNumber, downloadTime) {
                     }
                     console.log('done!');
                 });
-
+                var options = {
+                    file: '/home/jack/videos/*.mp4',
+                    user: 'jack',
+                    host: '192.168.196.123',
+                    port: '22',
+                    path: '/home/jack/videos'
+                    }
+                    scp.send(options, function (err) {
+                    if (err) console.log(err);
+                    else {
+                        console.log('File transferred.')
+                        
+                    }
+                    });
                 channelIdentifier = 1
             }
         })
@@ -259,33 +274,6 @@ module.exports = {
 };
 
 /*
-var scp = require('scp');
-                var options = {
-                file: '/home/jack/videos/*.mp4',
-                user: 'admin',
-                host: '192.168.196.51',
-                port: '22',
-                path: '/home/admin/videos'
-                }
-                scp.send(options, function (err) {
-                if (err) console.log(err);
-                else {
-                    console.log('File transferred.')
-                    var options = {
-                        file: '/home/jack/videos/*.dav',
-                        user: 'admin',
-                        host: '192.168.196.51',
-                        port: '22',
-                        path: '/home/admin/videos'
-                        }
-                        
-                        scp.send(options, function (err) {
-                        if (err) console.log(err);
-                        else {
-                            console.log('File transferred.')
-                            
-                    }
-                    })
-                }
-                });
+
+                
 */

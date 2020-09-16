@@ -1,5 +1,5 @@
 var httpUtils = require('./getFiles')
-
+var SPD_Server = require('socket.io-client')('http://192.168.196.123:3000');
 var socket_io = require('socket.io');
 const moment = require('moment')
 var io = socket_io();
@@ -47,11 +47,17 @@ io.on("connection", function(socket) {
     });
 
     //Getting the GPS from the touchscreen PI
-    socket.on('gps', function(data) {
+    socket.on('gpscarGPS', function(data) {
         //sending GPS data back out
-        io.emit('gpsLocation', data)
+        console.log("car:  " + data.lon)
+
+        SPD_Server.emit('gpscarGPS', data)
     })
     //Here is where we listen for socket calls and perform actions based on the data
+    socket.on('bodyCamgps', function(data) {
+        SPD_Server.emit('bodyCamGPS', data)
+        console.log("BodyCam:  " + data.lon)
+    })
     socket.on('action', function(data) {
         switch (data) {
             case 'signIn':
