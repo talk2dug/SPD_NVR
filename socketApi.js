@@ -99,6 +99,15 @@ io.on("connection", function(socket) {
 
         //io.emit('setting',data)
     })
+   
+    socket.on("streamCam", function(data){
+        console.log(data)
+        
+        
+
+
+
+    })
 });
 socketApi.io = io;
 
@@ -107,4 +116,5 @@ socketApi.sendNotification = function() {
         msg: 'Hello World!'
     });
 }
+
 module.exports = socketApi;
