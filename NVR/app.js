@@ -36,35 +36,13 @@ var server = app.listen(3001, function() {
 Stream = require('node-rtsp-stream')
 stream = new Stream({
     name: 'name',
-    streamUrl: 'rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=1',
+    streamUrl: 'rtmp://192.168.196.163/live/BodyCam',
     wsPort: 9998,
     ffmpegOptions: { // options ffmpeg flags
        
         "-r": "25"
     }
   })
-setTimeout(() => {
-    stream.stop()
-    stream = new Stream({
-        name: 'name',
-        streamUrl: 'rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=4&subtype=1',
-        wsPort: 9998,
-        ffmpegOptions: { // options ffmpeg flags
-             
-            "-r": "25"
-        }
-      })
-}, 10000);
-setTimeout(() => {
-    stream.stop()
-    stream = new Stream({
-        name: 'name',
-        streamUrl: 'rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=5&subtype=1',
-        wsPort: 9998,
-        ffmpegOptions: { 
-            
-            "-r": "25"
-        }
-      })
-}, 30000);
+
+
 module.exports = app;
