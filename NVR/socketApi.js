@@ -93,9 +93,4 @@ io.on("connection", function(socket) {
 });
 socketApi.io = io;
 
-socketApi.sendNotification = function() {
-    io.sockets.emit('hello', {
-        msg: 'Hello World!'
-    });
-}
 module.exports = socketApi;
