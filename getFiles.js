@@ -1,5 +1,4 @@
 const fs = require('fs');
-//const COSjUtils = require('./public/javascripts/jacksCode');
 const moment = require('moment');
 var scp = require('scp');
 let user = 'jack';
@@ -18,19 +17,13 @@ var spawn = require('child_process').spawn,
     child5 = null,
     child6 = null,
     child7 = null,
-    child8 = null;
 setTimeout(function() {
     console.log(ffmpegStatus)
     if (ffmpegStatus === 'stop') {
-
         ffmpegStatus = 'null'
     }
 }, 1000)
-
 function getRTSPfileStream() {
-
-
-
     child = spawn("ffmpeg", [
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
         "-c", "copy",
@@ -40,12 +33,9 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture-%03d.mp4"
     ]);
-    //child.stdout.pipe(process.stdout);
-    //child.stderr.pipe(process.stdout);
     child.on('exit', function() {
         console.log("exited")
     });
-
     child2 = spawn("ffmpeg", [
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=2&subtype=0",
         "-c", "copy",
@@ -55,8 +45,6 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture2-%03d.mp4"
     ]);
-    //child2.stdout.pipe(process.stdout);
-    //child2.stderr.pipe(process.stdout);
     child2.on('exit', function() {
         console.log("exited")
     });
@@ -69,8 +57,6 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture3-%03d.mp4"
     ]);
-    //child3.stdout.pipe(process.stdout);
-    //child3.stderr.pipe(process.stdout);
     child3.on('exit', function() {
         console.log("exited")
     });
@@ -83,8 +69,6 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture4-%03d.mp4"
     ]);
-    //child4.stdout.pipe(process.stdout);
-    //child4.stderr.pipe(process.stdout);
     child4.on('exit', function() {
         console.log("exited")
     });
@@ -97,12 +81,9 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture5-%03d.mp4"
     ]);
-    //child5.stdout.pipe(process.stdout);
-    //child5.stderr.pipe(process.stdout);
     child5.on('exit', function() {
         console.log("exited")
     });
-   
     child6=spawn("ffmpeg",[ 
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
         "-c", "copy", 
@@ -112,8 +93,6 @@ function getRTSPfileStream() {
         "-segment_format", "mp4", 
         "/home/jack/videos/capture6-%03d.mp4"
         ]);
-        //child6.stdout.pipe(process.stdout);
-        //child6.stderr.pipe(process.stdout);
         child6.on('exit', function () {
         console.log("exited") 
         });
@@ -126,30 +105,9 @@ function getRTSPfileStream() {
             "-segment_format", "mp4", 
             "/home/jack/videos/capture7-%03d.mp4"
             ]);
-            //child7.stdout.pipe(process.stdout);
-            //child7.stderr.pipe(process.stdout);
             child7.on('exit', function () {
             console.log("exited") 
             });
-             /*
-            child8=spawn("ffmpeg",[ 
-                "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
-                "-c", "copy", 
-                "-map", "0", 
-                "-f", "segment", 
-                "-segment_time", "300", 
-                "-segment_format", "mp4", 
-                "/home/jack/videos/capture8-%03d.mp4"
-                ]);
-                child8.stdout.pipe(process.stdout);
-                child8.stderr.pipe(process.stdout);
-                child8.on('exit', function () {
-                console.log("exited") 
-                });
-                */
-
-
-
 }
 
 function stopFFMPEG() {
@@ -158,15 +116,13 @@ function stopFFMPEG() {
     child3.kill('SIGINT');
     child4.kill('SIGINT');
     child5.kill('SIGINT');
-    //child6.kill('SIGINT');
-    //child7.kill('SIGINT');
-    //child8.kill('SIGINT');
+    child6.kill('SIGINT');
+    child7.kill('SIGINT');
 }
 
 function getFile(channelNumber, downloadTime) {
     channelIdentifier = channelNumber
     startedTime = moment()
-    //file_name = COSjUtils.generateFilename()
     now = downloadTime;
     let dStamp = moment().format("YYYY-M-DD");
     let tStamp = moment().startOf('hour');
@@ -239,9 +195,7 @@ function getFile(channelNumber, downloadTime) {
             } else if (channelIdentifier > 8) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
                 var ncp = require('ncp').ncp;
-
                 //ncp.limit = 16;
-
                 ncp('/home/jack/videos/', '/mnt/drive/', function(err) {
                     if (err) {
                         return console.error(err);
@@ -258,8 +212,7 @@ function getFile(channelNumber, downloadTime) {
                     scp.send(options, function (err) {
                     if (err) console.log(err);
                     else {
-                        console.log('File transferred.')
-                        
+                        console.log('File transferred.')                   
                     }
                     });
                 channelIdentifier = 1
@@ -272,8 +225,3 @@ module.exports = {
     getFile,
     stopFFMPEG
 };
-
-/*
-
-                
-*/

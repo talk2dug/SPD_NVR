@@ -48,15 +48,11 @@ io.on("connection", function(socket) {
 
     //Getting the GPS from the touchscreen PI
     socket.on('gpscarGPS', function(data) {
-        //sending GPS data back out
-        //console.log("car:  " + data.lon)
-
         SPD_Server.emit('gpscarGPS', data)
     })
     //Here is where we listen for socket calls and perform actions based on the data
     socket.on('bodyCamgps', function(data) {
         SPD_Server.emit('bodyCamGPS', data)
-        //console.log("BodyCam:  " + data.lon)
     })
     socket.on('action', function(data) {
         switch (data) {
@@ -73,7 +69,6 @@ io.on("connection", function(socket) {
                     break;
                 }
                 case 'startCall':
-                    console.log("staaaart caaaaal")
                     datestamp = moment()
                     downloadFiles()
                     io.emit("bodyCam", "START")
@@ -84,19 +79,15 @@ io.on("connection", function(socket) {
                     endCallClicked = true
                     io.emit("bodyCam", "STOP")
                     httpUtils.stopFFMPEG()
-
                     break;
                 case 'download':
-
                     //setTimeout(function(){
                     //downloadFiles()
                     break;
                 default:
-
         }
     })
     socket.on('settings', function(data) {
-
         //io.emit('setting',data)
     })
 });
