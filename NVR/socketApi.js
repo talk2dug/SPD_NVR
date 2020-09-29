@@ -9,6 +9,10 @@ let timestamp = {}
 var os = require('os');
 var ifaces = os.networkInterfaces();
 const fs = require('fs');
+const mongoose = require('mongoose');
+ //mongoose.connect('mongodb://192.168.196.123:27017/NVR', {
+
+//});
 require('events').EventEmitter.prototype._maxListeners = 100;
 var timeoutID;
 var endCallClicked = false
@@ -32,20 +36,6 @@ function downloadFiles() {
 
 io.on("connection", function(socket) {
     var datestamp = "";
-    Object.keys(ifaces).forEach(function(ifname) {
-        var alias = 0;
-        ifaces[ifname].forEach(function(iface) {
-            console.log(ifname)
-            if ('IPv4' !== iface.family || iface.internal !== false) {
-                return;
-            }
-            if (alias >= 1) {} else {
-                ip = iface.address
-            }
-            ++alias;
-        });
-    });
-
     //Getting the GPS from the touchscreen PI
     socket.on('gpscarGPS', function(data) {
         SPD_Server.emit('gpscarGPS', data)
@@ -87,10 +77,6 @@ io.on("connection", function(socket) {
                 default:
         }
     })
-    socket.on('settings', function(data) {
-        //io.emit('setting',data)
-    })
 });
 socketApi.io = io;
-
 module.exports = socketApi;
