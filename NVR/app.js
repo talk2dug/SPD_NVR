@@ -32,7 +32,7 @@ var server = app.listen(3001, function() {
     console.log('Listening on port %d', server.address().port);
 });
 
-/*
+
 Stream = require('node-rtsp-stream')
 stream = new Stream({
     name: 'name',
@@ -43,6 +43,6 @@ stream = new Stream({
         "-r": "25"
     }
   })
-*/
+
 
 module.exports = app;
