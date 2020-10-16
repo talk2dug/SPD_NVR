@@ -1,5 +1,5 @@
 const fs = require('fs');
-//const COSjUtils = require('./public/javascripts/jacksCode');
+
 const moment = require('moment');
 var scp = require('scp');
 let user = 'jack';
@@ -26,128 +26,103 @@ setTimeout(function() {
         ffmpegStatus = 'null'
     }
 }, 1000)
-
+var socketApi = require('./socketApi')
+var badgeNum = socketApi.getBadgeNumber
+console.log(badgeNum)
 function getRTSPfileStream() {
 
-
-
+    var fileNameTImeStamp = moment().format("YYYY-MM-DD-HHmm");
+    
+    var name1 = 'Camera1_' + fileNameTImeStamp + ".mp4"
     child = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
-        "-c", "copy",
-        "-map", "0",
-        "-f", "segment",
-        "-segment_time", "300",
-        "-segment_format", "mp4",
-        "/home/jack/videos/capture-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name1
     ]);
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stdout);
     child.on('exit', function() {
         console.log("exited")
     });
-
+    var name2 = 'Camera2_' + fileNameTImeStamp + ".mp4"
     child2 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=2&subtype=0",
-        "-c", "copy",
-        "-map", "0",
-        "-f", "segment",
-        "-segment_time", "300",
-        "-segment_format", "mp4",
-        "/home/jack/videos/capture2-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name2
     ]);
     child2.stdout.pipe(process.stdout);
     child2.stderr.pipe(process.stdout);
     child2.on('exit', function() {
         console.log("exited")
     });
+    var name3 = 'Camera3_' + fileNameTImeStamp + ".mp4"
     child3 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=3&subtype=0",
-        "-c", "copy",
-        "-map", "0",
-        "-f", "segment",
-        "-segment_time", "300",
-        "-segment_format", "mp4",
-        "/home/jack/videos/capture3-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name3
     ]);
     child3.stdout.pipe(process.stdout);
     child3.stderr.pipe(process.stdout);
     child3.on('exit', function() {
         console.log("exited")
     });
+    var name4 = 'Camera4_' + fileNameTImeStamp + ".mp4"
     child4 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=4&subtype=0",
-        "-c", "copy",
-        "-map", "0",
-        "-f", "segment",
-        "-segment_time", "300",
-        "-segment_format", "mp4",
-        "/home/jack/videos/capture4-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name4
     ]);
     child4.stdout.pipe(process.stdout);
     child4.stderr.pipe(process.stdout);
     child4.on('exit', function() {
         console.log("exited")
     });
+    var name5 = 'Camera5_' + fileNameTImeStamp + ".mp4"
     child5 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=5&subtype=0",
-        "-c", "copy",
-        "-map", "0",
-        "-f", "segment",
-        "-segment_time", "300",
-        "-segment_format", "mp4",
-        "/home/jack/videos/capture5-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name5
     ]);
     child5.stdout.pipe(process.stdout);
     child5.stderr.pipe(process.stdout);
     child5.on('exit', function() {
         console.log("exited")
     });
-   
+    var name6 = 'Camera6_' + fileNameTImeStamp + ".mp4"
     child6=spawn("ffmpeg",[ 
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
-        "-c", "copy", 
-        "-map", "0", 
-        "-f", "segment", 
-        "-segment_time", "300", 
-        "-segment_format", "mp4", 
-        "/home/jack/videos/capture6-%03d.mp4"
+        "-acodec", "copy", "-vcodec", "copy",
+        name6
         ]);
         child6.stdout.pipe(process.stdout);
         child6.stderr.pipe(process.stdout);
         child6.on('exit', function () {
         console.log("exited") 
         });
+        var name7 = 'Camera7_' + fileNameTImeStamp + ".mp4"
         child7=spawn("ffmpeg",[ 
             "-hide_banner", "-loglevel", "panic",
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
-            "-c", "copy", 
-            "-map", "0", 
-            "-f", "segment", 
-            "-segment_time", "300", 
-            "-segment_format", "mp4", 
-            "/home/jack/videos/capture7-%03d.mp4"
+            "-acodec", "copy", "-vcodec", "copy",
+        name7
             ]);
             child7.stdout.pipe(process.stdout);
             child7.stderr.pipe(process.stdout);
             child7.on('exit', function () {
             console.log("exited") 
             });
-             
+            var name8 = 'Camera8_' + fileNameTImeStamp + ".mp4"
             child8=spawn("ffmpeg",[ 
                 "-hide_banner", "-loglevel", "panic",
                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
-                "-c", "copy", 
-                "-map", "0", 
-                "-f", "segment", 
-                "-segment_time", "300", 
-                "-segment_format", "mp4", 
-                "/home/jack/videos/capture8-%03d.mp4"
+                "-acodec", "copy", "-vcodec", "copy",
+        name8
                 ]);
                 child8.stdout.pipe(process.stdout);
                 child8.stderr.pipe(process.stdout);
@@ -237,7 +212,7 @@ function getFile(channelNumber, downloadTime) {
             });
         });
         res.on('error', function(err) {
-            console.log('oh noes');
+            console.log('oh no');
         });
         //whent he server send the end header, we then start downloading the next video channel 
         res.on('end', function() {

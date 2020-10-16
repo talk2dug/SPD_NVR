@@ -10,6 +10,7 @@ var os = require('os');
 var ifaces = os.networkInterfaces();
 const fs = require('fs');
 const mongoose = require('mongoose');
+var badgeNumber = "123456789";
  //mongoose.connect('mongodb://192.168.196.123:27017/NVR', {
 
 //});
@@ -75,37 +76,40 @@ io.on("connection", function(socket) {
     socket.on('bodyCamgps', function(data) {
         SPD_Server.emit('bodyCamGPS', data)
     })
-    
+    socket.on('badgeNumber', function(data) {
+        badgeNumber = data;
+            console.log(data)
+            var user = {"badgeNumber":data,
+                            "date":moment()            
+            }
+            const officeInfo = JSON.stringify(user);
+            fs.writeFile("/mnt/drive/temp.txt", officeInfo, (err) => {
+                if (err) console.log(err);
+                console.log("Successfully Written to File.");
+              });
+
+    })
     socket.on('action', function(data) {
         switch (data) {
-            case 'signIn':
-                if (piUtils.isCardMounted() === true) {
-                    console.log('SD card mounted')
-                    //offTable = fs.readFileSync('officer.json');
-                    //let officer = offTable.find(el => el.name === data.name)
-                    //officer.badgenum
-                    break;
-                } else {
-                    alert.type = "No drive mounted"
-                    io.emit('driveAlert', alert)
-                    break;
-                }
+            //case 'signIn':
+             // 
+             //   if (piUtils.isCardMounted() === true) {
+              //      console.log('SD card mounted')
+             //       //offTable = fs.readFileSync('officer.json');
+             //       //let officer = offTable.find(el => el.name === data.name)
+             //       //officer.badgenum
+             //       break;
+            //    } else {
+             //       alert.type = "No drive mounted"
+              //      io.emit('driveAlert', alert)
+              //      break;
+             //   }
                 case 'startCall':
                     datestamp = moment()
                     downloadFiles()
                     io.emit("bodyCam", "START")
-                    Stream = require('node-rtsp-stream')
-                    setTimeout(() => {
-stream = new Stream({
-    name: 'name',
-    streamUrl: 'rtmp://192.168.196.163/live/bodyCam',
-    wsPort: 9998,
-    ffmpegOptions: { // options ffmpeg flags
-       
-        "-r": "25"
-    }
-  })
-}, 5000);
+                 
+                 
                     break;
                 case 'endCall':
                     console.log('end caaaal')
@@ -123,5 +127,10 @@ stream = new Stream({
         }
     })
 });
+
+function getBadgeNumber(){
+
+    return badgeNumber
+}
 socketApi.io = io;
 module.exports = socketApi;
