@@ -33,16 +33,7 @@ var server = app.listen(3001, function() {
 });
 
 
-Stream = require('node-rtsp-stream')
-stream = new Stream({
-    name: 'name',
-    streamUrl: 'rtmp://192.168.196.163/live/BodyCam',
-    wsPort: 9998,
-    ffmpegOptions: { // options ffmpeg flags
-       
-        "-r": "25"
-    }
-  })
+
 
 
 module.exports = app;

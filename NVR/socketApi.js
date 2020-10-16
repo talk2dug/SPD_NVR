@@ -21,6 +21,37 @@ function clearAlert() {
     clearTimeout(timeoutID);
 }
 //This is the function that initiates the downloading of the files from the NVR
+
+function transferFiles(){
+    var fileNameDate = moment().format("YYYY-MM-DD");
+    var dirName = "/mnt/drive/" + fileNameDate
+    var spawn = require('child_process').spawn,
+    child = null,
+    child2 = null;
+
+    child = spawn("/opt/nodejs/bin/copyfiles", [
+        "/home/jack/videos/*.dav", dirName
+       
+    ]);
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stdout);
+    child.on('exit', function() {
+        console.log("exited")
+        child2 = spawn("/opt/nodejs/bin/copyfiles", [
+            "/home/jack/videos/*.mp4", dirName
+           
+        ]);
+        child2.stdout.pipe(process.stdout);
+        child2.stderr.pipe(process.stdout);
+        child2.on('exit', function() {
+            console.log("2 exited")
+        });
+    });
+
+
+
+}
+
 function downloadFiles() {
     httpUtils.getRTSPfileStream()
     httpUtils.getFile(1, moment())
@@ -44,6 +75,7 @@ io.on("connection", function(socket) {
     socket.on('bodyCamgps', function(data) {
         SPD_Server.emit('bodyCamGPS', data)
     })
+    
     socket.on('action', function(data) {
         switch (data) {
             case 'signIn':
@@ -62,6 +94,18 @@ io.on("connection", function(socket) {
                     datestamp = moment()
                     downloadFiles()
                     io.emit("bodyCam", "START")
+                    Stream = require('node-rtsp-stream')
+                    setTimeout(() => {
+stream = new Stream({
+    name: 'name',
+    streamUrl: 'rtmp://192.168.196.163/live/bodyCam',
+    wsPort: 9998,
+    ffmpegOptions: { // options ffmpeg flags
+       
+        "-r": "25"
+    }
+  })
+}, 5000);
                     break;
                 case 'endCall':
                     console.log('end caaaal')
@@ -72,7 +116,8 @@ io.on("connection", function(socket) {
                     break;
                 case 'download':
                     //setTimeout(function(){
-                    //downloadFiles()
+                    transferFiles()
+                    console.log("End Shift")
                     break;
                 default:
         }

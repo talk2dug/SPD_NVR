@@ -32,6 +32,7 @@ function getRTSPfileStream() {
 
 
     child = spawn("ffmpeg", [
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
         "-c", "copy",
         "-map", "0",
@@ -40,13 +41,14 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture-%03d.mp4"
     ]);
-    //child.stdout.pipe(process.stdout);
-    //child.stderr.pipe(process.stdout);
+    child.stdout.pipe(process.stdout);
+    child.stderr.pipe(process.stdout);
     child.on('exit', function() {
         console.log("exited")
     });
 
     child2 = spawn("ffmpeg", [
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=2&subtype=0",
         "-c", "copy",
         "-map", "0",
@@ -55,13 +57,13 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture2-%03d.mp4"
     ]);
-    //child2.stdout.pipe(process.stdout);
-    //child2.stderr.pipe(process.stdout);
+    child2.stdout.pipe(process.stdout);
+    child2.stderr.pipe(process.stdout);
     child2.on('exit', function() {
         console.log("exited")
     });
     child3 = spawn("ffmpeg", [
-        "-loglevel", "error",
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=3&subtype=0",
         "-c", "copy",
         "-map", "0",
@@ -76,6 +78,7 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     child4 = spawn("ffmpeg", [
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=4&subtype=0",
         "-c", "copy",
         "-map", "0",
@@ -84,12 +87,13 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture4-%03d.mp4"
     ]);
-    //child4.stdout.pipe(process.stdout);
-    //child4.stderr.pipe(process.stdout);
+    child4.stdout.pipe(process.stdout);
+    child4.stderr.pipe(process.stdout);
     child4.on('exit', function() {
         console.log("exited")
     });
     child5 = spawn("ffmpeg", [
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=5&subtype=0",
         "-c", "copy",
         "-map", "0",
@@ -98,13 +102,14 @@ function getRTSPfileStream() {
         "-segment_format", "mp4",
         "/home/jack/videos/capture5-%03d.mp4"
     ]);
-    //child5.stdout.pipe(process.stdout);
-    //child5.stderr.pipe(process.stdout);
+    child5.stdout.pipe(process.stdout);
+    child5.stderr.pipe(process.stdout);
     child5.on('exit', function() {
         console.log("exited")
     });
    
     child6=spawn("ffmpeg",[ 
+        "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
         "-c", "copy", 
         "-map", "0", 
@@ -113,12 +118,13 @@ function getRTSPfileStream() {
         "-segment_format", "mp4", 
         "/home/jack/videos/capture6-%03d.mp4"
         ]);
-        //child6.stdout.pipe(process.stdout);
-        //child6.stderr.pipe(process.stdout);
+        child6.stdout.pipe(process.stdout);
+        child6.stderr.pipe(process.stdout);
         child6.on('exit', function () {
         console.log("exited") 
         });
         child7=spawn("ffmpeg",[ 
+            "-hide_banner", "-loglevel", "panic",
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
             "-c", "copy", 
             "-map", "0", 
@@ -127,13 +133,14 @@ function getRTSPfileStream() {
             "-segment_format", "mp4", 
             "/home/jack/videos/capture7-%03d.mp4"
             ]);
-            //child7.stdout.pipe(process.stdout);
-            //child7.stderr.pipe(process.stdout);
+            child7.stdout.pipe(process.stdout);
+            child7.stderr.pipe(process.stdout);
             child7.on('exit', function () {
             console.log("exited") 
             });
              
             child8=spawn("ffmpeg",[ 
+                "-hide_banner", "-loglevel", "panic",
                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
                 "-c", "copy", 
                 "-map", "0", 
@@ -142,8 +149,8 @@ function getRTSPfileStream() {
                 "-segment_format", "mp4", 
                 "/home/jack/videos/capture8-%03d.mp4"
                 ]);
-                //child8.stdout.pipe(process.stdout);
-                //child8.stderr.pipe(process.stdout);
+                child8.stdout.pipe(process.stdout);
+                child8.stderr.pipe(process.stdout);
                 child8.on('exit', function () {
                 console.log("exited") 
                 });
@@ -249,20 +256,8 @@ function getFile(channelNumber, downloadTime) {
                     }
                     console.log('done!');
                 });
-                var options = {
-                    file: '/home/jack/videos/*.mp4',
-                    user: 'jack',
-                    host: '192.168.196.123',
-                    port: '22',
-                    path: '/home/jack/videos'
-                    }
-                    scp.send(options, function (err) {
-                    if (err) console.log(err);
-                    else {
-                        console.log('File transferred.')
-                        
-                    }
-                    });
+                
+              
                 channelIdentifier = 1
             }
         })
