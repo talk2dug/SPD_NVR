@@ -9,11 +9,35 @@ let timestamp = {}
 var os = require('os');
 var ifaces = os.networkInterfaces();
 const fs = require('fs');
-const mongoose = require('mongoose');
-var badgeNumber = "123456789";
- //mongoose.connect('mongodb://192.168.196.123:27017/NVR', {
+const assert = require('assert');
 
-//});
+const MongoClient = require('mongodb').MongoClient;
+const url = 'mongodb://localhost:27017';
+var db;
+var badgeNumber = "123456789";
+MongoClient.connect(url, function(err, client) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+   
+     db = client.db('SPDNVR');
+   
+    
+  });
+const insertDocuments = function(db, badgeNum, callback) {
+    var date = moment();
+    // Get the documents collection
+    const collection = db.collection('officerInfo');
+    // Insert some documents
+    collection.insert([
+      {"badgeNumber" : badgeNum, "date":date}
+    ], function(err, result) {
+      console.log(result)
+      console.log("Inserted 3 documents into the collection");
+      callback(result);
+    });
+  }
+
+
 require('events').EventEmitter.prototype._maxListeners = 100;
 var timeoutID;
 var endCallClicked = false
@@ -82,10 +106,13 @@ io.on("connection", function(socket) {
             var user = {"badgeNumber":data,
                             "date":moment()            
             }
-            const officeInfo = JSON.stringify(user);
-            fs.writeFile("/mnt/drive/temp.txt", officeInfo, (err) => {
+            const officerInfo = JSON.stringify(user);
+            fs.writeFile("/mnt/drive/temp.txt", officerInfo, (err) => {
                 if (err) console.log(err);
                 console.log("Successfully Written to File.");
+              });
+              insertDocuments(db,data, function() {
+                console.log("DUN")
               });
 
     })

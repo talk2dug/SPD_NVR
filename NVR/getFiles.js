@@ -1,4 +1,17 @@
 const fs = require('fs');
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const url = 'mongodb://localhost:27017';
+var db;
+var collection2;
+MongoClient.connect(url, function(err, client) {
+  assert.equal(null, err);
+  console.log("Connected successfully to server");
+ 
+   db = client.db('SPDNVR');
+   collection2 = db.collection('videoFiles');
+  
+});
 
 const moment = require('moment');
 var scp = require('scp');
@@ -10,6 +23,7 @@ var now
 var start_time
 var startedTime
 var ffmpegStatus
+
 var spawn = require('child_process').spawn,
     child = null,
     child2 = null,
@@ -26,103 +40,195 @@ setTimeout(function() {
         ffmpegStatus = 'null'
     }
 }, 1000)
-var socketApi = require('./socketApi')
-var badgeNum = socketApi.getBadgeNumber
-console.log(badgeNum)
-function getRTSPfileStream() {
+var officerInfo
+function uuidv4() {
+    return 'xxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
 
-    var fileNameTImeStamp = moment().format("YYYY-MM-DD-HHmm");
+  
+function getRTSPfileStream() {
+    fs.readFile("/mnt/drive/temp.txt", 'utf8', function(err, data) {
+        if (err) throw err;
+        console.log('OK: /mnt/drive/temp.txt');
+        console.log(data)
+        officerInfo = JSON.parse(data);
+        console.log(officerInfo.badgeNumber)
+        console.log(uuidv4());
+      
+        const collection = db.collection('officerInfo');
+        // Find some documents
+        collection.find({}).toArray(function(err, docs) {
+          assert.equal(err, null);
+          console.log("Found the following records");
+          console.log(docs)
+          
+        });
+
+
     
-    var name1 = 'Camera1_' + fileNameTImeStamp + ".mp4"
+
+
+
+    var fileNameTImeStamp = moment();
+    
+    var streamName = uuidv4() + ".mp4"
+    var location = "/home/jack/videos" + streamName
+    collection2.insert([
+        {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 1}
+      ], function(err, result) {
+        console.log(result)
+        
+        
+      });
     child = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name1
+        location
     ]);
     child.stdout.pipe(process.stdout);
     child.stderr.pipe(process.stdout);
     child.on('exit', function() {
         console.log("exited")
     });
-    var name2 = 'Camera2_' + fileNameTImeStamp + ".mp4"
+    var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 2}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
     child2 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=2&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name2
+        location
     ]);
     child2.stdout.pipe(process.stdout);
     child2.stderr.pipe(process.stdout);
     child2.on('exit', function() {
         console.log("exited")
     });
-    var name3 = 'Camera3_' + fileNameTImeStamp + ".mp4"
+    var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 3}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
     child3 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=3&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name3
+        location
     ]);
     child3.stdout.pipe(process.stdout);
     child3.stderr.pipe(process.stdout);
     child3.on('exit', function() {
         console.log("exited")
     });
-    var name4 = 'Camera4_' + fileNameTImeStamp + ".mp4"
+    var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 4}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
     child4 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=4&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name4
+        location
     ]);
     child4.stdout.pipe(process.stdout);
     child4.stderr.pipe(process.stdout);
     child4.on('exit', function() {
         console.log("exited")
     });
-    var name5 = 'Camera5_' + fileNameTImeStamp + ".mp4"
+    var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 5}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
     child5 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=5&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name5
+        location
     ]);
     child5.stdout.pipe(process.stdout);
     child5.stderr.pipe(process.stdout);
     child5.on('exit', function() {
         console.log("exited")
     });
-    var name6 = 'Camera6_' + fileNameTImeStamp + ".mp4"
+    var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 6}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
     child6=spawn("ffmpeg",[ 
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
         "-acodec", "copy", "-vcodec", "copy",
-        name6
+        location
         ]);
         child6.stdout.pipe(process.stdout);
         child6.stderr.pipe(process.stdout);
         child6.on('exit', function () {
         console.log("exited") 
         });
-        var name7 = 'Camera7_' + fileNameTImeStamp + ".mp4"
+        var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 7}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
         child7=spawn("ffmpeg",[ 
             "-hide_banner", "-loglevel", "panic",
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
             "-acodec", "copy", "-vcodec", "copy",
-        name7
+            location
             ]);
             child7.stdout.pipe(process.stdout);
             child7.stderr.pipe(process.stdout);
             child7.on('exit', function () {
             console.log("exited") 
             });
-            var name8 = 'Camera8_' + fileNameTImeStamp + ".mp4"
+            var streamName = uuidv4() + ".mp4"
+            var location = "/home/jack/videos" + streamName
+            collection2.insert([
+                {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 8}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
             child8=spawn("ffmpeg",[ 
                 "-hide_banner", "-loglevel", "panic",
                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
                 "-acodec", "copy", "-vcodec", "copy",
-        name8
+                location
+
                 ]);
                 child8.stdout.pipe(process.stdout);
                 child8.stderr.pipe(process.stdout);
@@ -130,7 +236,7 @@ function getRTSPfileStream() {
                 console.log("exited") 
                 });
                 
-
+            });
 
 
 }
@@ -196,7 +302,16 @@ function getFile(channelNumber, downloadTime) {
             x = 1
             // specify the path to the file, and create a buffer with characters we want to write
             var fileStartTime = moment(tStamp).format("HHmmss")
-            let path = "../videos/" + channelIdentifier + "_" + dStamp + "_" + fileStartTime + '.dav';
+            let pathOLD = "../videos/" + channelIdentifier + "_" + dStamp + "_" + fileStartTime + '.dav';
+            let davFileName = uuidv4() + '.dav';
+            let path = "../videos/" + davFileName
+            collection2.insert([
+                {"videoFile" : davFileName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileStartTime, "channel": channelIdentifier, "fileStartTime":fileStartTime}
+              ], function(err, result) {
+                console.log(result)
+                
+                
+              });
             // open the file in writing mode, adding a callback function where we do the actual writing
             fs.open(path, 'a', function(err, fd) {
                 if (err) {

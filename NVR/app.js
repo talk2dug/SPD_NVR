@@ -4,10 +4,11 @@ var path = require('path');
 var logger = require('morgan');
 var index = require('./routes/index');
 var users = require('./routes/users');
+var database = require('./routes/database');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-var logger = require('morgan');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // view engine setup
@@ -21,6 +22,7 @@ app.use(express.urlencoded({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/database', database);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     console.log(next)
