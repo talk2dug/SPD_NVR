@@ -91,11 +91,19 @@ function downloadFiles() {
 }
 
 io.on("connection", function(socket) {
-    var datestamp = "";
+    var datestamp = moment();
     //Getting the GPS from the touchscreen PI
     socket.on('gpscarGPS', function(data) {
         SPD_Server.emit('gpscarGPS', data)
-    })
+        var gpsData = JSON.stringify(data)
+        gpsData += "\r\n"
+        fs.appendFile( "/mnt/drive/gps.txt", gpsData, (err) => {
+            if (err) console.log(err);
+            console.log("Successfully Written GPS to File.");
+          });
+          
+         console.log(data)
+        })
     //Here is where we listen for socket calls and perform actions based on the data
     socket.on('bodyCamgps', function(data) {
         SPD_Server.emit('bodyCamGPS', data)
@@ -104,7 +112,7 @@ io.on("connection", function(socket) {
         badgeNumber = data;
             console.log(data)
             var user = {"badgeNumber":data,
-                            "date":moment()            
+                            "date":  datestamp         
             }
             const officerInfo = JSON.stringify(user);
             fs.writeFile("/mnt/drive/temp.txt", officerInfo, (err) => {

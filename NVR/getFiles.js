@@ -42,10 +42,10 @@ setTimeout(function() {
 }, 1000)
 var officerInfo
 function uuidv4() {
-    return 'xxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
   }
 
   
@@ -79,7 +79,7 @@ function getRTSPfileStream() {
     collection2.insert([
         {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 1}
       ], function(err, result) {
-        console.log(result)
+        console.log(err)
         
         
       });
@@ -99,7 +99,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 2}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -119,7 +119,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 3}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -139,7 +139,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 4}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -159,7 +159,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 5}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -179,7 +179,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 6}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -199,7 +199,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 7}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -219,7 +219,7 @@ function getRTSPfileStream() {
             collection2.insert([
                 {"videoFile" : streamName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileNameTImeStamp, "channel": 8}
               ], function(err, result) {
-                console.log(result)
+                console.log(err)
                 
                 
               });
@@ -305,13 +305,7 @@ function getFile(channelNumber, downloadTime) {
             let pathOLD = "../videos/" + channelIdentifier + "_" + dStamp + "_" + fileStartTime + '.dav';
             let davFileName = uuidv4() + '.dav';
             let path = "../videos/" + davFileName
-            collection2.insert([
-                {"videoFile" : davFileName, "officer":officerInfo.badgeNumber, "GPSlon":71.1532, "GPSlat":31.2541,"actionType":"Shots Fired", "date": fileStartTime, "channel": channelIdentifier, "fileStartTime":fileStartTime}
-              ], function(err, result) {
-                console.log(result)
-                
-                
-              });
+            
             // open the file in writing mode, adding a callback function where we do the actual writing
             fs.open(path, 'a', function(err, fd) {
                 if (err) {
@@ -321,7 +315,9 @@ function getFile(channelNumber, downloadTime) {
                 fs.write(fd, data, 0, data.length, null, function(err) {
                     if (err) throw 'error writing file: ' + err;
                     fs.close(fd, function() {
+                        
                         return ('wrote the file successfully: batch run ');
+                        
                     });
                 });
             });
