@@ -7,7 +7,7 @@ var users = require('./routes/users');
 var database = require('./routes/database');
 var app = express();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
