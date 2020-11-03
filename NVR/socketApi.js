@@ -1,5 +1,5 @@
 var httpUtils = require('./getFiles')
-//var SPD_Server = require('socket.io-client')('http://192.168.196.123:3000');
+var SPD_TouchScreen = require('socket.io-client')('http://10.10.10.5:3000');
 var socket_io = require('socket.io');
 const moment = require('moment')
 var io = socket_io();
@@ -17,6 +17,7 @@ const url = 'mongodb://localhost:27017';
 var db;
 var badgeNumber = "123456789";
 var d = require('diskinfo');
+const { spawn } = require("child_process");
 d.getDrives(function(err, aDrives) {
         
     for (var i = 0; i < aDrives.length; i++) {
@@ -30,7 +31,101 @@ d.getDrives(function(err, aDrives) {
       }
     
 });
+var geolib = require('geolib');
+var GPS = require('./node_modules/gps/gps.js');
+var gps = new GPS;
+const SerialPort = require('serialport')
+const port = new SerialPort('/dev/ttyS0', {
+    baudRate: 9600
+})
+const Readline = require('@serialport/parser-readline');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
+var touchScreen = require('socket.io-client')('http://10.10.10.5:3000');
+// Open errors will be emitted as an error event
+port.on('error', function(err) {
+  console.log('Error: ', err.message)
+})
+var gpsLOG = 0;
 
+
+
+
+var prevLAT
+var prevLON
+var GPSarray = {}
+const parser = port.pipe(new Readline({ delimiter: '\r\n' }))
+parser.on('data', function(data) {
+    gps.update(data);
+    //parseGPS(gps);
+})
+function calculateHeading(lon, lat) {
+    var Heading = 0;
+    var angles = require('angles');
+    Heading = GPS.Heading(prevLAT, prevLAT, lat, lon);
+    Heading = Heading.toFixed(0)
+    prevLAT = lat;
+    prevLON = lon;
+    return Heading;
+}
+gps.on('state', function(data){
+    
+
+})
+var gpsData
+io.on("connection", function(socket) {
+gps.on('GGA', function(data) {
+    //console.log(data)
+    var headingDir = calculateHeading(data.lon, data.lat)
+    GPSarray['lon'] = data.lon
+    GPSarray['lat'] = data.lat
+    GPSarray['heading'] = headingDir
+    if (gps.state.speed != null) {GPSarray['speed'] = gps.state.speed.toFixed(2)}
+    if (gps.state.speed == null) {GPSarray['speed'] = 0}
+		GPSarray['time'] = data.time
+		if (data.lon === null) {
+		var pos = {'lon': '-76.558225','lat': '38.06033333333333'}
+    } else {
+        var pos = {'lon': data.lon,'lat': data.lat}
+    }
+    headingDir = calculateHeading(gps.state.lon, gps.state.lat)
+    gpsData ={"lon": gps.state.lon,
+    "lat": gps.state.lat,
+    "heading":headingDir,
+    "satsActive":data.satellites,
+    "alt":gps.state.alt,
+    "time":data.time,
+    "quality":data.quality,
+    "speed":gps.state.speed}
+    io.emit('state', gpsData)
+    touchScreen.emit('gpsData', gpsData)
+    if(gpsLOG===1){
+
+        console.log(moment(gpsData.time).format("h-mm", true))
+        var day = moment(gpsData.time).format("MMDDyyyy", true)
+        var time = moment(gpsData.time).format("hhmm", true)
+        var logfileTimeStamp = day +"-"+ time
+        
+         console.log(logfileTimeStamp)
+        gpsData = JSON.stringify(gpsData)
+        gpsData += "\r\n"
+        fs.appendFile( "/mnt/drive/data/GPS-"+day+".txt", gpsData, (err) => {
+            if (err) console.log(err);
+            console.log("Successfully Written GPS to File.");
+        });
+    
+    }
+  
+    
+    io.emit('recordingStatus', getFiles.getRecordingStatus())
+        
+        var exec = require('child_process').exec;
+        exec('date -s "' + data.time.toString() + '"', function(error, stdout, stderr) {
+          if (error) throw error;
+          // Clock should be set now, exit
+          //console.log("Set time to " + data.time.toString());
+          //process.exit();
+        });
+});
 
 MongoClient.connect(url, function(err, client) {
     assert.equal(null, err);
@@ -84,49 +179,88 @@ function downloadFiles() {
     }, 900000)
 }
 var recordingStatus = "Not Recording"
-io.on("connection", function(socket) {
+var copyingStatus =""
     
      recordingStatus = getFiles.getRecordingStatus()
     console.log("Recording Status: " + recordingStatus)
+
+   
+
+    
+    copyingStatus = getFiles.getcopyingStatus()
+    console.log("Copying Status: " + copyingStatus)
+
     var datestamp = moment();
     getFiles.setNVRTime();
     
     socket.on('loadDrive', function(data) {
         if(driveMounted === 1){
             socket.emit('driveStatus', "Mounted")
-
+            socket.emit('copyingStatus',copyingStatus)
         }
         else{
-        var exec = require('child_process').exec;
-                    exec('mount /dev/sda1 /mnt/drive', function(error, stdout, stderr) {
-                      if (error){
-                        console.log(error)
-                    }
-                      // Clock should be set now, exit
-                      console.log(stdout);
-                      socket.emit('driveStatus', "Mounted")
-                      driveMounted ===1;
-                      //process.exit();
-                    });
-                }            
+            
+            const ls = spawn("mount", ["/dev/sda1", "/mnt/drive"]);
+            ls.stdout.on("data", data => {
+                console.log(`stdout: ${data}`);
+                socket.emit('driveStatus', "Mounted")
+                driveMounted = 1;
+            });
+            
+            ls.stderr.on("data", data => {
+                console.log(`stderr: ${data}`);
+                socket.emit('driveStatus', "Not Mounted")
+                driveMounted = 0;
+            });
+            
+            ls.on('error', (error) => {
+                console.log(`error: ${error.message}`);
+            });
+            
+            ls.on("close", code => {
+                console.log(`child process exited with code ${code}`);
+                socket.emit('driveStatus', "Mounted")
+            });
+                         
+        }
     })
     socket.on('ejectDrive', function(data) {
+        copyingStatus = getFiles.getcopyingStatus()
         console.log(driveMounted)
-        if(driveMounted===1){
-        var exec = require('child_process').exec;
-                    exec('umount /mnt/drive', function(error, stdout, stderr) {
-                      if (error) throw error;
-                      // Clock should be set now, exit
-                      console.log(stdout);
-                      driveMounted === 0;
-                      socket.emit('driveStatus', "Not Mounted")
-                      //process.exit();
-                    });
-                }
-                else{socket.emit('driveStatus', "Mounted")}
+        socket.emit('copyingStatus',copyingStatus)
+        if(copyingStatus==="Coppying"){
+            socket.emit('copyingStatus', "Copying")
+
+
+        }
+        if(copyingStatus==="Not Coppying"){
+            const ls2 = spawn("umount", ["/mnt/drive"]);
+            ls2.stdout.on("data", data => {
+                console.log(`stdout: ${data}`);
+                socket.emit('driveStatus', "Not Mounted")
+                driveMounted = 0;
+            });
+            
+            ls2.stderr.on("data", data => {
+                console.log(`stderr: ${data}`);
+            });
+            
+            ls2.on('error', (error) => {
+                console.log(`error: ${error.message}`);
+            });
+            
+            ls2.on("close", code => {
+                console.log(`child process exited with code ${code}`);
+                socket.emit('driveStatus', "Not Mounted")
+                driveMounted = 0;
+            });
+        }
+               
+
     })
     socket.on('getDriveStatus', function(data) {
-        var driveMounted = 0;
+        copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
         d.getDrives(function(err, aDrives) {
         
               for (var i = 0; i < aDrives.length; i++) {
@@ -144,8 +278,10 @@ io.on("connection", function(socket) {
         });
     })
     socket.on('state', function(data) {
-        socket.emit('recordingStatus', getFiles.getRecordingStatus())
         
+        socket.emit('recordingStatus', getFiles.getRecordingStatus())
+        copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
         var exec = require('child_process').exec;
         exec('date -s "' + data.time.toString() + '"', function(error, stdout, stderr) {
           if (error) throw error;
@@ -157,40 +293,35 @@ io.on("connection", function(socket) {
 
     })
     //Getting the GPS from the touchscreen PI
-    socket.on('gpscarGPS', function(data) {
-       
-        var exec = require('child_process').exec;
-  exec('date -s "' + data.time.toString() + '"', function(error, stdout, stderr) {
-    if (error) throw error;
-    // Clock should be set now, exit
-    //console.log("Set time to " + data.time.toString());
-    //process.exit();
-  });
-        var gpsData = JSON.stringify(data)
-        gpsData += "\r\n"
-        fs.appendFile( "/mnt/drive/data/gps.txt", gpsData, (err) => {
-            if (err) console.log(err);
-            console.log("Successfully Written GPS to File.");
-        });
+  
+        
          //console.log(data)
-    })
+    
     //Here is where we listen for socket calls and perform actions based on the data
     socket.on('bodyCamgps', function(data) {
        
     })
     socket.on('officerStatus', function(data) {
-
+        var gpsPacket = getFiles.getGPSPacket()
+        copyingStatus = getFiles.getcopyingStatus()
+        var officerData = data;
+        officerData.gpsPacket = gpsPacket
+        socket.emit('copyingStatus',copyingStatus)
             console.log(data)
             var officerStatusData = JSON.stringify(data)
-            officerStatusData += "\r\n"
+            officerStatusData += "\n"
         fs.appendFile( "/mnt/drive/data/officerStatusData.txt", officerStatusData, (err) => {
             if (err) console.log(err);
             console.log("Successfully Written Officer to File.");
+            getFiles.setOfficerInfo(data)
+
         });
 
     })
     
     socket.on('action', function(data) {
+        copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
         console.log(data)
         switch (data) {
             //case 'signIn':
@@ -208,29 +339,36 @@ io.on("connection", function(socket) {
              //   }
              
                 case 'startcall':
+                    copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
                     datestamp = moment()
                     downloadFiles()
                     io.emit("bodyCam", "START")
-                 
+                    gpsLOG = 1;
                  
                     break;
                 case 'endcall':
+                    copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
                     console.log('end caaaal')
                     datestamp = moment()
                     endCallClicked = true
                     io.emit("bodyCam", "STOP")
                     httpUtils.stopFFMPEG()
+                    gpsLOG = 0;
                     break;
                 case 'download':
+                    copyingStatus = getFiles.getcopyingStatus()
+        socket.emit('copyingStatus',copyingStatus)
                     //setTimeout(function(){
                     transferFiles()
                     console.log("End Shift")
                     break;
                 default:
         }
-    })
+    
 });
-
+})
 //var ncp = require('ncp').ncp;
 
                 //ncp.limit = 16;

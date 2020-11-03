@@ -8,7 +8,6 @@ var database = require('./routes/database');
 var app = express();
 var server = require('http').Server(app);
 
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // view engine setup

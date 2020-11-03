@@ -13,6 +13,7 @@ var start_time
 var startedTime
 var ffmpegStatus
 var recordingStatus = "Not Recording";
+var officeInfo = {}
 var spawn = require('child_process').spawn,
     child = null,
     child2 = null,
@@ -29,7 +30,14 @@ setTimeout(function() {
         ffmpegStatus = 'null'
     }
 }, 1000)
+var myself = require('socket.io-client')('http://127.0.0.1:3000');
+var copyingStatus = "Not Copying";
+var gpsPacket = {}
+myself.on('state', function(data){
+            
+            gpsPacket = data
 
+})
 function uuidv4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -108,16 +116,25 @@ function getChannelNames(){
 
 function getRTSPfileStream() {
     recordingStatus = "Recording";
-     videoFiles = "";
+     videoFiles = [];
     var fileNameTImeStamp = moment().format("YYYY-MM-DD-HHmm");
     console.log()
+    var gpsData = JSON.stringify(gpsPacket)
+    var timeMetaData = "comment="+gpsData
     var name1 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name1+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
-    
+    videoFiles.push( {
+        'location':name1,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':1,
+        'gpsData': gpsPacket
+    })
+
     child = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=1&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy", "-metadata", timeMetaData,
         name1
     ]);
     child.stdout.pipe(process.stdout);
@@ -126,12 +143,20 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     var name2 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name2+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+    videoFiles.push( {
+        'location':name2,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':2,
+        'gpsData': gpsPacket
+    })
+    
     console.log(name2)
     child2 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=2&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name2
     ]);
     child2.stdout.pipe(process.stdout);
@@ -140,11 +165,20 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     var name3 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name3+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+    videoFiles.push( {
+        'location':name3,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':3,
+        'gpsData': gpsPacket
+    })
+    
+    
     child3 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=3&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name3
     ]);
     child3.stdout.pipe(process.stdout);
@@ -153,11 +187,20 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     var name4 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name4+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+    videoFiles.push( {
+        'location':name4,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':4,
+        'gpsData': gpsPacket
+    })
+    
+    
     child4 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=4&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name4
     ]);
     child4.stdout.pipe(process.stdout);
@@ -166,12 +209,20 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     var name5 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name5+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
-
+    videoFiles.push( {
+        'location':name5,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':5,
+        'gpsData': gpsPacket
+    })
+    
+    
     child5 = spawn("ffmpeg", [
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=5&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name5
     ]);
     child5.stdout.pipe(process.stdout);
@@ -180,11 +231,22 @@ function getRTSPfileStream() {
         console.log("exited")
     });
     var name6 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-    videoFiles += "{'location':"+ name6+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+    videoFiles.push({
+        'location':name6,
+        'date':fileNameTImeStamp,
+        'officer':officeInfo.badgeNumber,
+        'action':officeInfo.action, 
+        'channel':6,
+        'gpsData': gpsPacket
+    })
+    
+    
+    
+    
     child6=spawn("ffmpeg",[ 
         "-hide_banner", "-loglevel", "panic",
         "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=6&subtype=0",
-        "-acodec", "copy", "-vcodec", "copy",
+        "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name6
         ]);
         child6.stdout.pipe(process.stdout);
@@ -193,11 +255,21 @@ function getRTSPfileStream() {
         console.log("exited") 
         });
         var name7 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-        videoFiles += "{'location':"+ name7+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+        videoFiles.push( {
+            'location':name7,
+            'date':fileNameTImeStamp,
+            'officer':officeInfo.badgeNumber,
+            'action':officeInfo.action, 
+            'channel':7,
+            'gpsData': gpsPacket
+        })
+        
+        
+        
         child7=spawn("ffmpeg",[ 
             "-hide_banner", "-loglevel", "panic",
             "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=7&subtype=0",
-            "-acodec", "copy", "-vcodec", "copy",
+            "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name7
             ]);
             child7.stdout.pipe(process.stdout);
@@ -206,11 +278,20 @@ function getRTSPfileStream() {
             console.log("exited") 
             });
             var name8 = '/mnt/drive/live/' + uuidv4() + ".mp4"
-            videoFiles += "{'location':"+ name8+ ",'date':"+fileNameTImeStamp+",'officer':6661515,'action':'Shots Fired'},\r\n"
+            videoFiles.push( {
+                'location':name8,
+                'date':fileNameTImeStamp,
+                'officer':officeInfo.badgeNumber,
+                'action':officeInfo.action, 
+                'channel':8,
+                'gpsData': gpsPacket
+            })
+            
+            
             child8=spawn("ffmpeg",[ 
                 "-hide_banner", "-loglevel", "panic",
                 "-i", "rtsp://jack:UUnv9njxg123!!@10.10.10.2:554/cam/realmonitor?channel=8&subtype=0",
-                "-acodec", "copy", "-vcodec", "copy",
+                "-acodec", "copy", "-vcodec", "copy","-metadata", timeMetaData,
         name8
                 ]);
                 child8.stdout.pipe(process.stdout);
@@ -224,10 +305,19 @@ function getRTSPfileStream() {
 }
 function stopFFMPEG() {
 console.log(videoFiles)
-                fs.appendFile( "/mnt/drive/data/videoFiles.txt", videoFiles, (err) => {
-                    if (err) console.log(err);
-                    console.log("Successfully Written Videos to File.");
-                  });
+for(var i = 0; i<videoFiles.length;i++){
+    var dataString = JSON.stringify(videoFiles[i])
+    dataString += "\n"
+    fs.appendFile( "/mnt/drive/data/videoFiles.txt", dataString, (err) => {
+        if (err) console.log(err);
+        console.log("Successfully Written Videos to File.");
+      });
+
+
+}
+ 
+
+                
     child.kill('SIGINT');
     child2.kill('SIGINT');
     child3.kill('SIGINT');
@@ -242,6 +332,7 @@ console.log(videoFiles)
 }
 
 function getFile(channelNumber, downloadTime) {
+    copyingStatus = "Coppying";
     channelIdentifier = channelNumber
     startedTime = moment()
     //file_name = COSjUtils.generateFilename()
@@ -292,6 +383,7 @@ function getFile(channelNumber, downloadTime) {
     }, function(res) {
         //receiving the data stream from the NVR to be saved to file
         res.on('data', function(data) {
+            copyingStatus = "Coppying";
             x = 1
             // specify the path to the file, and create a buffer with characters we want to write
              fileStartTime = moment(tStamp).format("HHmmss")
@@ -319,17 +411,29 @@ function getFile(channelNumber, downloadTime) {
         res.on('end', function() {
             if (channelIdentifier < 9) {
                 copyingStatus = "Coppying";
-                var videoFile = "{'location':"+ path+ ",'date':"+dStamp+",'officer':6661515,'action':'Shots Fired', 'channel':"+channelIdentifier+",'startTime':"+  fileStartTime  +"},\r\n"
-            fs.appendFile( "/mnt/drive/data/videoBackUp.txt", videoFile, (err) => {
+
+                var videoFile = {
+                    'location':path,
+                    'date':dStamp,
+                    'officer':officeInfo.badgeNumber,
+                    'action':officeInfo.action, 
+                    'channel':channelIdentifier,
+                    'startTime':fileStartTime,
+                    'gpsData': gpsPacket
+            }
+            var dataString = JSON.stringify(videoFile)
+            dataString += "\n"
+            fs.appendFile( "/mnt/drive/data/videoBackUp.txt", dataString, (err) => {
                 if (err) console.log(err);
                 console.log("Successfully Written Videos to File.");
+
               });
                 channelIdentifier++
                 getFile(channelIdentifier, now)
 
             } else if (channelIdentifier > 8) {
                 //just resets the camera counter, sowhen it runs again in 15 min it starts at 1
-                copyingStatus = "Dont Copying";
+                copyingStatus = "Not Copying";
               
                 channelIdentifier = 1
             }
@@ -341,12 +445,37 @@ function getRecordingStatus(){
     return recordingStatus
 
 }
+function getcopyingStatus(){
+console.log(copyingStatus)
+    return copyingStatus
+
+    //l
+
+}
+
+function setOfficerInfo(data){
+        console.log(data)
+        console.log("JAJ")
+        officeInfo = data
+
+
+
+}
+function getGPSPacket(){
+        return gpsPacket
+
+
+
+}
 module.exports = {
     getRTSPfileStream,
     getFile,
     stopFFMPEG,
     getChannelNames,
     setNVRTime,
-    getRecordingStatus
+    getRecordingStatus,
+    getcopyingStatus,
+    setOfficerInfo,
+    getGPSPacket
 };
 
